@@ -10,6 +10,11 @@ const itens = [
 ];
 
 const listaItens = document.getElementById("listaItens");
+const totalItensEl = document.getElementById("totalItens");
+const resumoVendasEl = document.getElementById("resumoVendas");
+const taxaPainelEl = document.getElementById("taxaPainel");
+const valorFinalEl = document.getElementById("valorFinal");
+const modoPrecoEl = document.getElementById("modoPreco");
 
 function formatarMoeda(valor) {
   return valor.toLocaleString("pt-BR", {
@@ -27,17 +32,17 @@ function renderItens() {
     const row = document.createElement("div");
     row.className = "linha tabela-itens";
     row.innerHTML = `
-      <input type="checkbox" class="check-item" data-index="${index}">
+      <span><input type="checkbox" class="check-item" data-index="${index}"></span>
       <span>${item.nome}</span>
       <span class="preco">${formatarMoeda(preco)}</span>
-      <input type="number" min="0" value="0" class="qtd-item" data-index="${index}">
+      <span><input type="number" min="0" value="0" class="qtd-item" data-index="${index}"></span>
     `;
 
     listaItens.appendChild(row);
   });
 
-  const modoPreco = document.getElementById("modoPreco");
-  modoPreco.textContent = parceria ? "• PARCERIA ATIVA" : "• SEM PARCERIA";
+  modoPrecoEl.textContent = parceria ? "• PARCERIA ATIVA" : "• SEM PARCERIA";
+  atualizarTotais();
 }
 
 function atualizarTotais() {
@@ -56,20 +61,27 @@ function atualizarTotais() {
   const taxaPainel = totalItens * 0.60;
   const valorFinal = totalItens + taxaPainel;
 
-  document.getElementById("totalItens").textContent = formatarMoeda(totalItens);
-  document.getElementById("resumoVendas").textContent = formatarMoeda(totalItens);
-  document.getElementById("taxaPainel").textContent = formatarMoeda(taxaPainel);
-  document.getElementById("valorFinal").textContent = formatarMoeda(valorFinal);
+  totalItensEl.textContent = formatarMoeda(totalItens);
+  resumoVendasEl.textContent = formatarMoeda(totalItens);
+  taxaPainelEl.textContent = formatarMoeda(taxaPainel);
+  valorFinalEl.textContent = formatarMoeda(valorFinal);
 }
 
 function trocarParceria() {
   parceria = !parceria;
   renderItens();
-  atualizarTotais();
 }
 
-document.addEventListener("change", atualizarTotais);
-document.addEventListener("input", atualizarTotais);
+document.addEventListener("change", (event) => {
+  if (event.target.classList.contains("check-item") || event.target.classList.contains("qtd-item")) {
+    atualizarTotais();
+  }
+});
+
+document.addEventListener("input", (event) => {
+  if (event.target.classList.contains("qtd-item")) {
+    atualizarTotais();
+  }
+});
 
 renderItens();
-atualizarTotais();
