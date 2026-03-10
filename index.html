@@ -13,38 +13,26 @@
         <img src="logo-bratva.png" alt="Logo Bratva" class="logo" />
         <div class="titulos">
           <h1>BRATVA</h1>
-          <p>Calculadora de Vendas</p>
+          <p>Mercado Oficial</p>
         </div>
       </div>
+
       <div class="topo-direita">
-        <span>Calculadora de Itens </span>
+        <span>Calculadora de Contrabando & Drogas</span>
       </div>
     </header>
 
     <main class="grid">
       <section class="card">
-        <div class="card-header">
-          <h2>Itens na Parceria</h2>
-        </div>
-
-        <div class="tabela-header tabela-consertos">
-          <span>OK</span>
-          <span>Itens</span>
-          <span>PREÇO</span>
-        </div>
-
-        <div id="listaConsertos"></div>
-
-        <div class="subtotal">
-          <span>TOTAL Produtos:</span>
-          <strong id="totalConsertos">R$ 0,00</strong>
-        </div>
-      </section>
-
-      <section class="card">
         <div class="card-header itens-topo">
           <h2>ITENS / VENDAS</h2>
-          <span class="badge">• 20% PAINEL</span>
+          <span class="badge" id="modoPreco">• PARCERIA ATIVA</span>
+        </div>
+
+        <div class="acoes-topo">
+          <button class="btn-parceria" onclick="trocarParceria()">
+            Alternar Parceria
+          </button>
         </div>
 
         <div class="tabela-header tabela-itens">
@@ -65,19 +53,17 @@
 
     <section class="resumo card">
       <div class="linha-resumo">
-        <span>Total Consertos</span>
-        <strong id="resumoConsertos">R$ 0,00</strong>
-      </div>
-      <div class="linha-resumo">
         <span>Total Vendas</span>
         <strong id="resumoVendas">R$ 0,00</strong>
       </div>
+
       <div class="linha-resumo">
         <span>Taxa Painel (60% sobre vendas)</span>
         <strong id="taxaPainel">R$ 0,00</strong>
       </div>
+
       <div class="linha-total-geral">
-        <span>Valor Total do de itens + Vendas</span>
+        <span>Valor Total de Itens + Painel</span>
         <strong id="valorFinal">R$ 0,00</strong>
       </div>
     </section>
