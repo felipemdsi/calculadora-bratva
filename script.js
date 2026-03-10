@@ -1,96 +1,68 @@
-const Itens Sem Parceria = [
-  { nome: "C4", preco: 20000 },
-  { nome: "Colete", preco: 25000 },
-  { nome: "Capuz", preco: 5000 },
-  { nome: "USB Hacker", preco: 20000 },
-  { nome: "Algema", preco: 9000 },
-  { nome: "Externo", Drogas: 700 },
-  { nome: "Externo Norte", LSD: 700 }
+let parceria = true;
+
+const itens = [
+  { nome: "C4", parceria: 15000, normal: 20000 },
+  { nome: "Colete", parceria: 20000, normal: 25000 },
+  { nome: "Capuz", parceria: 3000, normal: 5000 },
+  { nome: "USB Hacker", parceria: 15000, normal: 20000 },
+  { nome: "Algema", parceria: 8000, normal: 9000 },
+  { nome: "Drogas (unidade)", parceria: 600, normal: 700 }
 ];
 
-const itens na Parceria = [
-  { nome: "C4 (PARCERIA)", preco: 15000 },
-  { nome: "Colete", preco: 20000 },
-  { nome: "Capuz", preco: 3000 },
-  { nome: "USB Hacker", preco: 15000 },
-  { nome: "Algema", preco: 8000 },
-  { nome: "Drogas", preco: 600 },
-  { nome: "LSD", preco: 600 },
-  { nome: "---r", preco: 0 },
-  { nome: "C---", preco: 0 }
-];
-
-const listaConsertos = document.getElementById("listaConsertos");
 const listaItens = document.getElementById("listaItens");
 
-function formatarMoeda(valor) {
-  return valor.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL"
-  });
+function formatar(valor){
+  return valor.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 }
 
-function criarConsertos() {
-  consertos.forEach((item, index) => {
-    const row = document.createElement("div");
-    row.className = "linha tabela-consertos";
-    row.innerHTML = `
-      <input type="checkbox" class="check-conserto" data-index="${index}">
+function renderItens(){
+
+  listaItens.innerHTML = "";
+
+  itens.forEach((item,index)=>{
+
+    const preco = parceria ? item.parceria : item.normal;
+
+    const linha = document.createElement("div");
+
+    linha.className="linha";
+
+    linha.innerHTML = `
+      <input type="checkbox" class="checkItem" data-index="${index}">
       <span>${item.nome}</span>
-      <span class="preco">${formatarMoeda(item.preco)}</span>
+      <span class="preco">${formatar(preco)}</span>
+      <input type="number" value="0" min="0" class="qtdItem" data-index="${index}">
     `;
-    listaConsertos.appendChild(row);
+
+    listaItens.appendChild(linha);
+
   });
+
 }
 
-function criarItens() {
-  itens.forEach((item, index) => {
-    const row = document.createElement("div");
-    row.className = "linha tabela-itens";
-    row.innerHTML = `
-      <input type="checkbox" class="check-item" data-index="${index}">
-      <span>${item.nome}</span>
-      <span class="preco">${formatarMoeda(item.preco)}</span>
-      <input type="number" min="0" value="0" class="qtd-item" data-index="${index}">
-    `;
-    listaItens.appendChild(row);
-  });
-}
+function calcular(){
 
-function atualizarTotais() {
-  let totalConsertos = 0;
-  let totalItens = 0;
+  let total = 0;
 
-  document.querySelectorAll(".check-conserto").forEach((checkbox, index) => {
-    if (checkbox.checked) {
-      totalConsertos += consertos[index].preco;
+  document.querySelectorAll(".checkItem").forEach((box,index)=>{
+
+    if(box.checked){
+
+      const qtd = document.querySelector(`.qtdItem[data-index="${index}"]`).value;
+
+      const preco = parceria ? itens[index].parceria : itens[index].normal;
+
+      total += preco * qtd;
+
     }
+
   });
 
-  document.querySelectorAll(".check-item").forEach((checkbox, index) => {
-    const qtdInput = document.querySelector(`.qtd-item[data-index="${index}"]`);
-    const qtd = Number(qtdInput.value) || 0;
+  document.getElementById("totalItens").innerText = formatar(total);
 
-    if (checkbox.checked && qtd > 0) {
-      totalItens += itens[index].preco * qtd;
-    }
-  });
-
-  const taxaPainel = totalItens * 0.20;
-  const valorFinal = totalConsertos + totalItens + taxaPainel;
-
-  document.getElementById("totalConsertos").textContent = formatarMoeda(totalConsertos);
-  document.getElementById("totalItens").textContent = formatarMoeda(totalItens);
-  document.getElementById("resumoConsertos").textContent = formatarMoeda(totalConsertos);
-  document.getElementById("resumoVendas").textContent = formatarMoeda(totalItens);
-  document.getElementById("taxaPainel").textContent = formatarMoeda(taxaPainel);
-  document.getElementById("valorFinal").textContent = formatarMoeda(valorFinal);
 }
 
-criarConsertos();
-criarItens();
+document.addEventListener("change",calcular);
+document.addEventListener("input",calcular);
 
-document.addEventListener("change", atualizarTotais);
-document.addEventListener("input", atualizarTotais);
-
-atualizarTotais();
+renderItens();
