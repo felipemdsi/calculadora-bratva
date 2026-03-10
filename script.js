@@ -28,45 +28,46 @@ function renderItens() {
   listaItens.innerHTML = "";
 
   itens.forEach((item, index) => {
-    const preco = parceria ? item.parceria : item.normal;
+    const precoAtual = parceria ? item.parceria : item.normal;
 
     const row = document.createElement("div");
     row.className = "linha tabela-itens";
     row.innerHTML = `
       <span><input type="checkbox" class="check-item" data-index="${index}"></span>
       <span>${item.nome}</span>
-      <span class="preco">${formatarMoeda(preco)}</span>
+      <span class="preco">${formatarMoeda(precoAtual)}</span>
       <span><input type="number" min="0" value="0" class="qtd-item" data-index="${index}"></span>
     `;
+
     listaItens.appendChild(row);
   });
 
-  modoPrecoEl.textContent = parceria ? "• PARCERIA ATIVA" : "• SEM PARCERIA";
+  modoPrecoEl.textContent = parceria ? "• COM PARCERIA" : "• SEM PARCERIA";
   atualizarTotais();
 }
 
 function atualizarTotais() {
-  let totalItens = 0;
+  let totalVendas = 0;
 
   document.querySelectorAll(".check-item").forEach((checkbox, index) => {
     const qtdInput = document.querySelector(`.qtd-item[data-index="${index}"]`);
     const qtd = Number(qtdInput.value) || 0;
 
     if (checkbox.checked && qtd > 0) {
-      const preco = parceria ? itens[index].parceria : itens[index].normal;
-      totalItens += preco * qtd;
+      const precoAtual = parceria ? itens[index].parceria : itens[index].normal;
+      totalVendas += precoAtual * qtd;
     }
   });
 
-  const painel = totalItens * 0.60;
-  const comissao = totalItens * 0.40;
-  const valorFinal = totalItens;
+  const valorPainel = totalVendas * 0.60;
+  const valorComissao = totalVendas * 0.40;
+  const valorTotal = totalVendas;
 
-  totalItensEl.textContent = formatarMoeda(totalItens);
-  resumoVendasEl.textContent = formatarMoeda(totalItens);
-  taxaPainelEl.textContent = formatarMoeda(painel);
-  comissaoValorEl.textContent = formatarMoeda(comissao);
-  valorFinalEl.textContent = formatarMoeda(valorFinal);
+  totalItensEl.textContent = formatarMoeda(totalVendas);
+  resumoVendasEl.textContent = formatarMoeda(totalVendas);
+  taxaPainelEl.textContent = formatarMoeda(valorPainel);
+  comissaoValorEl.textContent = formatarMoeda(valorComissao);
+  valorFinalEl.textContent = formatarMoeda(valorTotal);
 }
 
 function trocarParceria() {
