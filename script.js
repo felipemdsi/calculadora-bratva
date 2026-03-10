@@ -13,6 +13,7 @@ const listaItens = document.getElementById("listaItens");
 const totalItensEl = document.getElementById("totalItens");
 const resumoVendasEl = document.getElementById("resumoVendas");
 const taxaPainelEl = document.getElementById("taxaPainel");
+const comissaoValorEl = document.getElementById("comissaoValor");
 const valorFinalEl = document.getElementById("valorFinal");
 const modoPrecoEl = document.getElementById("modoPreco");
 
@@ -37,7 +38,6 @@ function renderItens() {
       <span class="preco">${formatarMoeda(preco)}</span>
       <span><input type="number" min="0" value="0" class="qtd-item" data-index="${index}"></span>
     `;
-
     listaItens.appendChild(row);
   });
 
@@ -58,12 +58,14 @@ function atualizarTotais() {
     }
   });
 
-  const taxaPainel = totalItens * 0.60;
-  const valorFinal = totalItens + taxaPainel;
+  const painel = totalItens * 0.60;
+  const comissao = totalItens * 0.40;
+  const valorFinal = totalItens;
 
   totalItensEl.textContent = formatarMoeda(totalItens);
   resumoVendasEl.textContent = formatarMoeda(totalItens);
-  taxaPainelEl.textContent = formatarMoeda(taxaPainel);
+  taxaPainelEl.textContent = formatarMoeda(painel);
+  comissaoValorEl.textContent = formatarMoeda(comissao);
   valorFinalEl.textContent = formatarMoeda(valorFinal);
 }
 
@@ -73,7 +75,10 @@ function trocarParceria() {
 }
 
 document.addEventListener("change", (event) => {
-  if (event.target.classList.contains("check-item") || event.target.classList.contains("qtd-item")) {
+  if (
+    event.target.classList.contains("check-item") ||
+    event.target.classList.contains("qtd-item")
+  ) {
     atualizarTotais();
   }
 });
